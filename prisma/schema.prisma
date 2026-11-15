@@ -1,0 +1,50 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Student {
+  id           String             @id // Matric Number or Reg Number (e.g. "CSC/2022/014" or "REG/2024/001")
+  name         String             // Full Name
+  profilePhoto String             // Baseline profile photo taken on first registration
+  registeredAt DateTime           @default(now())
+  records      AttendanceRecord[]
+}
+
+model Class {
+  id          String              @id @default(uuid())
+  courseCode  String              // e.g. "CSC 301"
+  courseTitle String              // e.g. "Data Structures"
+  lecturer    String              // e.g. "Dr. Adebayo"
+  createdAt   DateTime            @default(now())
+  sessions    AttendanceSession[]
+}
+
+model AttendanceSession {
+  id              String             @id @default(uuid())
+  classId         String
+  class           Class              @relation(fields: [classId], references: [id], onDelete: Cascade)
+  status          String             @default("active") // "active", "closed"
+  durationMinutes Int                @default(10)
+  openedAt        DateTime           @default(now())
+  expiresAt       DateTime
+  records         AttendanceRecord[]
+}
+
+model AttendanceRecord {
+  id                String            @id @default(uuid())
+  sessionId         String
+  session           AttendanceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  studentId         String            // Matric Number or Reg Number
+  student           Student?          @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentName       String            // Full Name snapshot
+  selfieData        String            // In-class live selfie taken today
+  deviceFingerprint String?           // Browser fingerprint / IP
+  submittedAt       DateTime          @default(now())
+
+  @@unique([sessionId, studentId])
+}

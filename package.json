@@ -1,0 +1,30 @@
+{
+  "name": "smart-attendance",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --webpack -p 3050",
+    "build": "prisma generate && next build --webpack",
+    "start": "next start -p 3050",
+    "db:push": "prisma db push",
+    "db:seed": "node scripts/seed.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "lucide-react": "^1.30.0",
+    "next": "^16.1.1",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.14",
+    "prisma": "^5.22.0",
+    "tailwindcss": "^4.2.4",
+    "typescript": "^5"
+  }
+}
