@@ -5,10 +5,11 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/client"
 }
 
 model Student {
-  id           String             @id // Matric Number or Reg Number (e.g. "CSC/2022/014" or "REG/2024/001")
+  id           String             @id // Matric Number or Reg Number (e.g. "SWE/2022/014" or "REG/2024/001")
   name         String             // Full Name
   profilePhoto String             // Baseline profile photo taken on first registration
   registeredAt DateTime           @default(now())
@@ -17,8 +18,8 @@ model Student {
 
 model Class {
   id          String              @id @default(uuid())
-  courseCode  String              // e.g. "CSC 301"
-  courseTitle String              // e.g. "Data Structures"
+  courseCode  String              // e.g. "SWE 301"
+  courseTitle String              // e.g. "Software Architecture & Design"
   lecturer    String              // e.g. "Dr. Adebayo"
   createdAt   DateTime            @default(now())
   sessions    AttendanceSession[]

@@ -14,21 +14,35 @@ export async function GET(req: Request) {
 
     const records = await prisma.attendanceRecord.findMany({
       where: { sessionId },
-      include: {
-        student: {
-          select: {
-            id: true,
-            name: true,
-            profilePhoto: true,
-            registeredAt: true,
-          },
-        },
-      },
       orderBy: { submittedAt: 'desc' },
     });
 
-    return NextResponse.json(records);
+    const studentIds = records.map((r) => r.studentId).filter(Boolean);
+    let studentMap: Record<string, any> = {};
+
+    if (studentIds.length > 0) {
+      const students = await prisma.student.findMany({
+        where: { id: { in: studentIds } },
+        select: {
+          id: true,
+          name: true,
+          profilePhoto: true,
+          registeredAt: true,
+        },
+      });
+      students.forEach((st) => {
+        studentMap[st.id] = st;
+      });
+    }
+
+    const enrichedRecords = records.map((r) => ({
+      ...r,
+      student: studentMap[r.studentId] || null,
+    }));
+
+    return NextResponse.json(enrichedRecords);
   } catch (error: any) {
+    console.error('Error fetching attendance records:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
@@ -109,9 +123,6 @@ export async function POST(req: Request) {
         selfieData,
         deviceFingerprint: deviceFingerprint || 'student-phone',
       },
-      include: {
-        student: true,
-      },
     });
 
     return NextResponse.json(
@@ -128,6 +139,7 @@ export async function POST(req: Request) {
       { status: 201 }
     );
   } catch (error: any) {
+    console.error('Error submitting attendance:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
