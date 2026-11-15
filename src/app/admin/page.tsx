@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Plus, Users, Clock, Download, Lock, Unlock, RefreshCw, Eye, ArrowLeft, ShieldCheck, UserCheck, AlertTriangle } from 'lucide-react';
 
 interface AttendanceRecord {
@@ -230,13 +231,13 @@ export default function AdminDashboardPage() {
             <Plus className="w-4 h-4" />
             Add Class
           </button>
-          <a
+          <Link
             href="/"
-            className="text-xs text-slate-300 hover:text-white flex items-center gap-1 font-medium bg-slate-800 px-3 py-2 rounded-xl"
+            className="text-xs text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 flex items-center gap-1.5 font-bold px-3 py-2 rounded-xl transition shadow-sm"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            Student View
-          </a>
+            <ArrowLeft className="w-3.5 h-3.5 text-blue-400" />
+            <span>Student Portal</span>
+          </Link>
         </div>
       </header>
 
